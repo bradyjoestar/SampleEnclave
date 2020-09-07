@@ -110,3 +110,5 @@ fabric.properties
 
 
 RequiredTest/occlum_instance/
+
+sealed_data_blob.txt
