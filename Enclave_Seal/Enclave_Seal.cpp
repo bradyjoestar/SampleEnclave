@@ -40,10 +40,28 @@
 char encrypt_data[BUFSIZ] = "Data to encrypt";
 char aad_mac_text[BUFSIZ] = "aad mac text";
 
-
 uint32_t get_sealed_data_size()
 {
     return sgx_calc_sealed_data_size((uint32_t)strlen(aad_mac_text), (uint32_t)strlen(encrypt_data));
+}
+
+struct LogicStruct
+{
+    int number1;
+    int number2;
+};
+
+int max(LogicStruct logicStruct)
+{
+    /* 局部变量声明 */
+    int result;
+
+    if (logicStruct.number1 > logicStruct.number2)
+        result = logicStruct.number1;
+    else
+        result = logicStruct.number2;
+
+    return result;
 }
 
 sgx_status_t seal_data(uint8_t* sealed_blob, uint32_t data_size)
@@ -62,6 +80,15 @@ sgx_status_t seal_data(uint8_t* sealed_blob, uint32_t data_size)
     {
         // Copy the sealed data to outside buffer
         memcpy(sealed_blob, temp_sealed_buf, sealed_data_size);
+    }
+
+    struct LogicStruct logicStruct1;
+    logicStruct1.number1 = 3;
+    logicStruct1.number2 = 5;
+
+    int e = max(logicStruct1);
+    if (e != logicStruct1.number2){
+        return SGX_ERROR_OUT_OF_MEMORY;
     }
 
     free(temp_sealed_buf);
